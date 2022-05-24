@@ -4,6 +4,9 @@
 
 ### Instructions
 
+- Créez le projet dans votre environnement de développement.
+  - Le plus simple, sur la VM du cours et CLion, dans la fenêtre *New Projet* choisissez *Get from VCS* puis indiquez l'adresse du dépôt git: https://IFT2008-TD/Graphe.git
+
 ### Description de la classe
 
 Cette classe doit représenter un graphe dirigé ou orienté. Elle contient donc un ensemble de *sommets* reliés entre
@@ -43,6 +46,6 @@ La classe Graphe doit respecter en tout temps les conditions de validité suivan
 ### Modèle d'implantation
 
 Bande de petits chanceux!!!  Il n'y a aucun modèle suggéré!  C'est à vous de prendre les décisions de design 
-afin de respecter le cahier des charges!  Par-contre, pour vous épargner du travail, je vous fournie une liste
+afin de respecter le cahier des charges!  Par-contre, pour vous épargner du travail, je vous fournis une liste
 de tests unitaires.  Votre mission est de faire fonctionner les tests...
 
