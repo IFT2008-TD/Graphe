@@ -41,6 +41,10 @@ public:
 
     std::string format () const ;
 
+private:
+
+    std::map<T, std::set<T>> listes ;
+
 
 };
 
