@@ -9,25 +9,17 @@
 #include <map>
 #include <algorithm>
 #include <stdexcept>
+#include <initializer_list>
 
-/*
-- Construction : on doit pouvoir construire un graphe contenant un nombre déterminé de sommets, sans arête.  Par-défaut ce constructeur crée un graphe vide, ne contenant aucun sommet ni arête.
-- ajouterUnSommet(cle): cette méthode permet d'ajouter un sommet au graphe. Si la clé existe, la méthode doit échouer d'une manière raisonnable.
-- ajouterUneArete(cleDepart, cleArrivee): cette méthode permet d'ajouter une arête au graphe, du sommet de départ au sommet d'arrivée. Si l'arête existe, doit échouer.  Si une des clés n'existe pas, doit aussi échouer.
-- sommetExiste(cle): cette méthode permet de vérifier la présence d'un sommet ayant une clé donnée.
-- areteExiste(cleDepart, cleArrivee): cette méthode permet de vérifier la présence d'une arête de départ vers arrivée.
-- degreEntree(cleArrivee): cette méthode compte le nombre d'arêtes terminant sur cleArrivee.
-- degreSortie(cleDepart): cette méthode compte le nombre d'arêtes partant de cleDepart.
-- taille: cette méthode retourne le nombre de sommets dans le graphe.
-- enumererSommetsArrivee(cleDepart): cette méthode retourne une liste de tous les sommets vers lesquels cleDepart possède une arête.
-- enumererSommetsDepart(cleArrivee): cette méthode retourne une liste de tous les sommets ayant une arête vers cleArrivee.
-*/
+
 template <typename T>
 class Graphe {
 public:
     typedef  std::set<T> listeAdjacence;
  public:
-    explicit Graphe(size_t cardinal = 0) ;
+    explicit Graphe() ;
+
+    Graphe (std::initializer_list<T>) ;
 
     void ajouterUnSommet(const T&) ;
 
@@ -53,7 +45,12 @@ public:
 };
 
 template <typename T>
-Graphe<T>::Graphe(size_t cardinal) {
+Graphe<T>::Graphe() {
+
+}
+
+template <typename T>
+Graphe<T>::Graphe(std::initializer_list<T> l) {
 
 }
 
