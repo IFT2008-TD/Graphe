@@ -84,7 +84,7 @@ bool Graphe<T>::areteExiste(const T &depart, const T &arrivee) const {
 
 template<typename T>
 size_t Graphe<T>::degreEntree(const T &cle) const {
-    return enumererSommetsArrivee(cle).size() ;
+    return enumererSommetsDepart(cle).size() ;
 }
 
 template<typename T>

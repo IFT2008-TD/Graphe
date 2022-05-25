@@ -152,6 +152,6 @@ TEST_F(GrapheTest, ajouterUneArete_g4) {
     EXPECT_EQ(1, g_4.degreEntree(4)) ;
     EXPECT_EQ(arrivee1, g_4.enumererSommetsArrivee(1)) ;
     EXPECT_EQ(arrivee3, g_4.enumererSommetsArrivee(3)) ;
-    EXPECT_EQ(depart1, g_2.enumererSommetsDepart(1)) ;
-    EXPECT_EQ(depart3, g_2.enumererSommetsDepart(3)) ;
+    EXPECT_EQ(depart1, g_4.enumererSommetsDepart(1)) ;
+    EXPECT_EQ(depart3, g_4.enumererSommetsDepart(3)) ;
 }
