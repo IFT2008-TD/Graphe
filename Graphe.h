@@ -36,9 +36,9 @@ public:
 
     size_t taille () const ;
 
-    ListeAdjacence enumererSommetsArrivee(const T&) const ;
+    ListeAdjacence enumererSommetsPartantDe(const T&) const ;
 
-    ListeAdjacence enumererSommetsDepart(const T&) const ;
+    ListeAdjacence enumererSommetsVers(const T&) const ;
 
     std::string format () const ;
 
@@ -49,7 +49,7 @@ private:
 
 private:
 
-    size_t numeroDeLaCle(const T& cle) ;
+    size_t numeroDeLaCle(const T& cle) const ;
 
 
 };
@@ -65,48 +65,62 @@ Graphe<T>::Graphe(std::initializer_list<T> l) {
 }
 
 template<typename T>
-void Graphe<T>::ajouterUnSommet(const T &) {
-
+void Graphe<T>::ajouterUnSommet(const T &cle) {
+    if (sommetExiste(cle)) throw std::invalid_argument("ajouterUnSommet: sommet existe déjà") ;
+    sommets.push_back(cle) ;
+    listes.emplace_back() ;
 }
 
 template<typename T>
-void Graphe<T>::ajouterUneArete(const T &, const T &) {
-
+void Graphe<T>::ajouterUneArete(const T &depart, const T &arrivee) {
+    if (areteExiste(depart, arrivee)) throw std::invalid_argument("ajouterArete: arete existe déjà") ;
+    listes.at(numeroDeLaCle(depart)).push_back(numeroDeLaCle(arrivee)) ;
 }
 
 template<typename T>
-bool Graphe<T>::sommetExiste(const T &) const {
-    return false;
+bool Graphe<T>::sommetExiste(const T &cle) const {
+    return !sommets.empty() && (numeroDeLaCle(cle) != sommets.size()) ;
 }
 
 template<typename T>
-bool Graphe<T>::areteExiste(const T &, const T &) const {
-    return false;
+bool Graphe<T>::areteExiste(const T &depart, const T &arrivee) const {
+    if (!(sommetExiste(depart)) || !(sommetExiste(arrivee))) throw std::invalid_argument("areteExiste: sommets non valides") ;
+    size_t idxDepart = numeroDeLaCle(depart) ;
+    return std::find(listes.at(idxDepart).begin(), listes.at(idxDepart).end(), numeroDeLaCle(arrivee)) != listes.at(idxDepart).end();
 }
 
 template<typename T>
-size_t Graphe<T>::degreEntree(const T &) const {
-    return 0;
+size_t Graphe<T>::degreEntree(const T &arrivee) const {
+    return enumererSommetsVers(arrivee).size() ;
 }
 
 template<typename T>
-size_t Graphe<T>::degreSortie(const T &) const {
-    return 0;
+size_t Graphe<T>::degreSortie(const T &source) const {
+    return enumererSommetsPartantDe(source).size() ;
 }
 
 template<typename T>
 size_t Graphe<T>::taille() const {
-    return 0;
+    return sommets.size();
 }
 
 template<typename T>
-typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsArrivee(const T &) const {
-    return Graphe::ListeAdjacence();
+typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsPartantDe(const T &source) const {
+    if (!sommetExiste(source)) throw std::invalid_argument("enumererSommetsPartantDe: source inexistante") ;
+
+    ListeAdjacence resultat ;
+    size_t idxSource = numeroDeLaCle(source) ;
+    for (auto idxArrivee: listes.at(idxSource)) resultat.insert(sommets.at(idxArrivee)) ;
+    return resultat ;
 }
 
 template<typename T>
-typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsDepart(const T &) const {
-    return Graphe::ListeAdjacence();
+typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsVers(const T &arrivee) const {
+    if (!sommetExiste(arrivee)) throw std::invalid_argument("enumererSommetsVers: arrivée inexistante") ;
+
+    ListeAdjacence resultat ;
+    for (auto source: sommets) if (areteExiste(source, arrivee)) resultat.insert(source) ;
+    return resultat ;
 }
 
 template<typename T>
@@ -122,8 +136,7 @@ std::string Graphe<T>::format() const {
  * @pre Le graphe doit être non-vide.
  */
 template<typename T>
-size_t Graphe<T>::numeroDeLaCle(const T &cle) {
-    assert(!sommets.empty()) ;
+size_t Graphe<T>::numeroDeLaCle(const T &cle) const {
     return static_cast<size_t> (std::find(sommets.begin(), sommets.end(), cle) - sommets.begin()) ;
 }
 

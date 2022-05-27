@@ -33,8 +33,8 @@ La classe Graphe doit permettre de réaliser les opérations suivantes :
 - degreEntree(cleArrivee): cette méthode compte le nombre d'arêtes terminant sur cleArrivee.
 - degreSortie(cleDepart): cette méthode compte le nombre d'arêtes partant de cleDepart.
 - taille: cette méthode retourne le nombre de sommets dans le graphe.
-- enumererSommetsArrivee(cleDepart): cette méthode retourne une liste de tous les sommets vers lesquels cleDepart possède une arête.
-- enumererSommetsDepart(cleArrivee): cette méthode retourne une liste de tous les sommets ayant une arête vers cleArrivee.
+- enumererSommetsPartantDe(cleDepart): cette méthode retourne une liste de tous les sommets vers lesquels cleDepart possède une arête.
+- enumererSommetsVers(cleArrivee): cette méthode retourne une liste de tous les sommets ayant une arête vers cleArrivee.
 
 ### Invariant de la classe
 
