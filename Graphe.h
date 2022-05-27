@@ -6,7 +6,8 @@
 #define GRAPHE_GRAPHE_H
 
 #include <set>
-#include <map>
+#include <vector>
+#include <list>
 #include <algorithm>
 #include <stdexcept>
 #include <initializer_list>
@@ -15,7 +16,7 @@
 template <typename T>
 class Graphe {
 public:
-    typedef  std::set<T> listeAdjacence;
+    typedef  std::set<T> ListeAdjacence;
  public:
     explicit Graphe() ;
 
@@ -35,17 +36,26 @@ public:
 
     size_t taille () const ;
 
-    listeAdjacence enumererSommetsArrivee(const T&) const ;
+    ListeAdjacence enumererSommetsArrivee(const T&) const ;
 
-    listeAdjacence enumererSommetsDepart(const T&) const ;
+    ListeAdjacence enumererSommetsDepart(const T&) const ;
 
     std::string format () const ;
+
+private:
+
+    std::vector<T> sommets ;
+    std::vector<std::list<size_t>> listes ;
+
+private:
+
+    size_t numeroDeLaCle(const T& cle) ;
 
 
 };
 
 template <typename T>
-Graphe<T>::Graphe() {
+Graphe<T>::Graphe() : sommets(), listes() {
 
 }
 
@@ -90,18 +100,31 @@ size_t Graphe<T>::taille() const {
 }
 
 template<typename T>
-typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsArrivee(const T &) const {
-    return Graphe::listeAdjacence();
+typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsArrivee(const T &) const {
+    return Graphe::ListeAdjacence();
 }
 
 template<typename T>
-typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsDepart(const T &) const {
-    return Graphe::listeAdjacence();
+typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsDepart(const T &) const {
+    return Graphe::ListeAdjacence();
 }
 
 template<typename T>
 std::string Graphe<T>::format() const {
     return std::string();
+}
+
+/**
+ * @brief Retourne l'index correspondant à la clé de sommet demandée
+ * @tparam T Type de la clé de sommet
+ * @param cle Clé de sommet
+ * @return Le numéro de sommet (0 -> N-1).  Retourne N si le sommet est introuvable.
+ * @pre Le graphe doit être non-vide.
+ */
+template<typename T>
+size_t Graphe<T>::numeroDeLaCle(const T &cle) {
+    assert(!sommets.empty()) ;
+    return static_cast<size_t> (std::find(sommets.begin(), sommets.end(), cle) - sommets.begin()) ;
 }
 
 

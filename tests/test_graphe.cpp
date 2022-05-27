@@ -90,13 +90,13 @@ TEST_F(GrapheTest, degreSortie_sommet_inexistant_throw) {
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g2) {
-    Graphe<int>::listeAdjacence attendu {2}, vide ;
+    Graphe<int>::ListeAdjacence attendu {2}, vide ;
     EXPECT_EQ(attendu, g_2.enumererSommetsArrivee(1)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsArrivee(2)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g4) {
-    Graphe<int>::listeAdjacence attendu {3} ;
+    Graphe<int>::ListeAdjacence attendu {3} ;
     EXPECT_EQ(attendu, g_4.enumererSommetsArrivee(2)) ;
 }
 
@@ -111,12 +111,12 @@ TEST_F(GrapheTest, enumererSommetsArrivee_inexistant_throw) {
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g4) {
-    Graphe<int>::listeAdjacence attendu {3} ;
+    Graphe<int>::ListeAdjacence attendu {3} ;
     EXPECT_EQ(attendu, g_4.enumererSommetsDepart(4)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g2) {
-    Graphe<int>::listeAdjacence attendu {1}, vide ;
+    Graphe<int>::ListeAdjacence attendu {1}, vide ;
     EXPECT_EQ(attendu, g_2.enumererSommetsDepart(2)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsDepart(1)) ;
 }
@@ -127,7 +127,7 @@ TEST_F(GrapheTest, taille) {
 }
 
 TEST_F(GrapheTest, ajouterUnSommet_g2) {
-    Graphe<int>::listeAdjacence vide ;
+    Graphe<int>::ListeAdjacence vide ;
     g_2.ajouterUnSommet(3) ;
     EXPECT_EQ(3, g_2.taille()) ;
     EXPECT_TRUE(g_2.sommetExiste(3)) ;
@@ -138,8 +138,8 @@ TEST_F(GrapheTest, ajouterUnSommet_g2) {
 }
 
 TEST_F(GrapheTest, ajouterUneArete_g4) {
-    Graphe<int>::listeAdjacence arrivee1{2, 3}, arrivee3{4} ;
-    Graphe<int>::listeAdjacence depart1{4}, depart3{1, 2};
+    Graphe<int>::ListeAdjacence arrivee1{2, 3}, arrivee3{4} ;
+    Graphe<int>::ListeAdjacence depart1{4}, depart3{1, 2};
     g_4.ajouterUneArete(1, 3) ;
     EXPECT_EQ(4, g_4.taille()) ;
     EXPECT_EQ(2, g_4.degreSortie(1)) ;
