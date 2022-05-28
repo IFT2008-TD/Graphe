@@ -45,6 +45,8 @@ public:
 
     listeAdjacence enumererSommetsVers(const T&) const ;
 
+    listeAdjacence enumererSommets () const ;
+
     std::string format () const ;
 
 private:
@@ -166,6 +168,13 @@ bool Graphe<T>::invariant() const {
         for (auto destination: sommet.second) if (!sommetExiste(destination)) return false ;
     }
     return true;
+}
+
+template<typename T>
+typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommets() const {
+    listeAdjacence resultat ;
+    for (auto e: listes) resultat.insert(e.first) ;
+    return resultat ;
 }
 
 

@@ -26,6 +26,13 @@ protected:
     }
 };
 
+TEST_F(GrapheTest, enumererSommets) {
+    Graphe<int>::listeAdjacence l2 {1, 2}, l4 {1, 2, 3, 4}, lvide ;
+    EXPECT_EQ(l2, g_2.enumererSommets()) ;
+    EXPECT_EQ(l4, g_4.enumererSommets()) ;
+    EXPECT_EQ(lvide, g_defaut.enumererSommets()) ;
+}
+
 TEST_F(GrapheTest, sommet_existe_g2_g4) {
     EXPECT_TRUE(g_2.sommetExiste(1)) ;
     EXPECT_FALSE(g_2.sommetExiste(0)) ;
@@ -163,18 +170,20 @@ TEST_F(GrapheTest, retirerUneArete_g2) {
 }
 
 TEST_F(GrapheTest, retirerUnSommet_g2) {
-    Graphe<int>::listeAdjacence vide ;
+    Graphe<int>::listeAdjacence vide, listeSommets {2} ;
     g_2.retirerUnSommet(1) ;
     EXPECT_EQ(1, g_2.taille()) ;
+    EXPECT_EQ(listeSommets, g_2.enumererSommets()) ;
     EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsVers(2)) ;
 
 }
 
 TEST_F(GrapheTest, renommerUnSommet_g2) {
-    Graphe<int>::listeAdjacence attendu1 {2}, attendu2 {666}, vide ;
+    Graphe<int>::listeAdjacence attendu1 {2}, attendu2 {666}, vide, listeSommets {2, 666} ;
     g_2.renommerUnSommet(1, 666) ;
     EXPECT_EQ(2, g_2.taille()) ;
+    EXPECT_EQ(listeSommets, g_2.enumererSommets()) ;
     EXPECT_EQ(attendu1, g_2.enumererSommetsAPartirDe(666)) ;
     EXPECT_EQ(attendu2, g_2.enumererSommetsVers(2)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsVers(666)) ;
