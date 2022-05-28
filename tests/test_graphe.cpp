@@ -7,20 +7,16 @@
 
 class GrapheTest : public ::testing::Test {
 protected:
-    Graphe<int> g_defaut ; 
+
+    GrapheTest() : g_2({1, 2}), g_4({1, 2, 3, 4}) {}
+
+    Graphe<int> g_defaut ;
     Graphe<int> g_4 ; 
     Graphe<int> g_2 ; 
     
     void SetUp () override {
-        g_2.ajouterUnSommet(1) ; 
-        g_2.ajouterUnSommet(2) ;
-        
-        g_2.ajouterUneArete(1, 2) ; 
-        
-        g_4.ajouterUnSommet(1) ;
-        g_4.ajouterUnSommet(2) ; 
-        g_4.ajouterUnSommet(3) ; 
-        g_4.ajouterUnSommet(4) ; 
+
+        g_2.ajouterUneArete(1, 2) ;
         
         g_4.ajouterUneArete(1, 2) ; 
         g_4.ajouterUneArete(2, 3) ; 
@@ -154,4 +150,23 @@ TEST_F(GrapheTest, ajouterUneArete_g4) {
     EXPECT_EQ(arrivee3, g_4.enumererSommetsAPartirDe(3)) ;
     EXPECT_EQ(depart1, g_4.enumererSommetsVers(1)) ;
     EXPECT_EQ(depart3, g_4.enumererSommetsVers(3)) ;
+}
+
+TEST_F(GrapheTest, retirerUneArete_g2) {
+    Graphe<int>::listeAdjacence vide ;
+    g_2.retirerUneArete(1, 2) ;
+    EXPECT_EQ(2, g_2.taille()) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(1)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(1)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(2)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
+}
+
+TEST_F(GrapheTest, retirerUnSommet_g2) {
+    Graphe<int>::listeAdjacence vide ;
+    g_2.retirerUnSommet(1) ;
+    EXPECT_EQ(1, g_2.taille()) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(2)) ;
+
 }

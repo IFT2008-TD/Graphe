@@ -129,7 +129,10 @@ void Graphe<T>::retirerUneArete(const T &depart, const T &arrivee) {
 
 template<typename T>
 void Graphe<T>::retirerUnSommet(const T &depart) {
-    for (auto liste: listes) if (liste.find(depart))  liste.erase(depart) ;
+    for (auto liste: listes) {
+        auto it = liste.second.find(depart) ;
+        if (it != liste.second.end())  liste.second.erase(it) ;
+    }
     listes.erase(depart) ;
 }
 
