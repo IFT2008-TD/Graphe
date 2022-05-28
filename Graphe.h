@@ -242,6 +242,8 @@ void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
     if (!sommetExiste(ancienneCle)) throw std::invalid_argument("renommerUnSommet: sommet inexistant") ;
     if (sommetExiste(nouvelleCle)) throw std::invalid_argument("renommerUnSommet: nouveau sommet déjà présent.") ;
 
+    // D'abord on doit remplacer l'ancienne clé dans toutes les listes d'adjacences
+
     for (auto liste: listes) {
         auto it = liste.second.find(ancienneCle) ;
         if (it != liste.second.end()) {
@@ -250,8 +252,12 @@ void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
         }
     }
 
+    // Ensuite recopier la liste d'adjacence associée à l'ancienne clé dans l'entrée de la nouvelle clé
     listes.insert({nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
+
+    // Puis effacer l'ancienne entrée
     listes.erase(ancienneCle) ;
+
     assert(invariant()) ;
 }
 
