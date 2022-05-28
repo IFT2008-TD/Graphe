@@ -91,34 +91,34 @@ TEST_F(GrapheTest, degreSortie_sommet_inexistant_throw) {
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g2) {
     Graphe<int>::listeAdjacence attendu {2}, vide ;
-    EXPECT_EQ(attendu, g_2.enumererSommetsArrivee(1)) ;
-    EXPECT_EQ(vide, g_2.enumererSommetsArrivee(2)) ;
+    EXPECT_EQ(attendu, g_2.enumererSommetsAPartirDe(1)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g4) {
     Graphe<int>::listeAdjacence attendu {3} ;
-    EXPECT_EQ(attendu, g_4.enumererSommetsArrivee(2)) ;
+    EXPECT_EQ(attendu, g_4.enumererSommetsAPartirDe(2)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsDeparts_g2_inexistant_throw) {
-    EXPECT_THROW(g_2.enumererSommetsDepart(26), std::invalid_argument) ;
-    EXPECT_THROW(g_4.enumererSommetsDepart(0), std::invalid_argument) ;
+    EXPECT_THROW(g_2.enumererSommetsVers(26), std::invalid_argument) ;
+    EXPECT_THROW(g_4.enumererSommetsVers(0), std::invalid_argument) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_inexistant_throw) {
-    EXPECT_THROW(g_2.enumererSommetsArrivee(10), std::invalid_argument) ;
-    EXPECT_THROW(g_4.enumererSommetsArrivee(-12), std::invalid_argument) ;
+    EXPECT_THROW(g_2.enumererSommetsAPartirDe(10), std::invalid_argument) ;
+    EXPECT_THROW(g_4.enumererSommetsAPartirDe(-12), std::invalid_argument) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g4) {
     Graphe<int>::listeAdjacence attendu {3} ;
-    EXPECT_EQ(attendu, g_4.enumererSommetsDepart(4)) ;
+    EXPECT_EQ(attendu, g_4.enumererSommetsVers(4)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g2) {
     Graphe<int>::listeAdjacence attendu {1}, vide ;
-    EXPECT_EQ(attendu, g_2.enumererSommetsDepart(2)) ;
-    EXPECT_EQ(vide, g_2.enumererSommetsDepart(1)) ;
+    EXPECT_EQ(attendu, g_2.enumererSommetsVers(2)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(1)) ;
 }
 
 TEST_F(GrapheTest, taille) {
@@ -131,8 +131,8 @@ TEST_F(GrapheTest, ajouterUnSommet_g2) {
     g_2.ajouterUnSommet(3) ;
     EXPECT_EQ(3, g_2.taille()) ;
     EXPECT_TRUE(g_2.sommetExiste(3)) ;
-    EXPECT_EQ(vide, g_2.enumererSommetsArrivee(3)) ;
-    EXPECT_EQ(vide, g_2.enumererSommetsDepart(3)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(3)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(3)) ;
     EXPECT_EQ(0, g_2.degreEntree(3)) ;
     EXPECT_EQ(0, g_2.degreSortie(3)) ;
 }
@@ -150,8 +150,8 @@ TEST_F(GrapheTest, ajouterUneArete_g4) {
     EXPECT_EQ(1, g_4.degreEntree(1)) ;
     EXPECT_EQ(1, g_4.degreEntree(2)) ;
     EXPECT_EQ(1, g_4.degreEntree(4)) ;
-    EXPECT_EQ(arrivee1, g_4.enumererSommetsArrivee(1)) ;
-    EXPECT_EQ(arrivee3, g_4.enumererSommetsArrivee(3)) ;
-    EXPECT_EQ(depart1, g_4.enumererSommetsDepart(1)) ;
-    EXPECT_EQ(depart3, g_4.enumererSommetsDepart(3)) ;
+    EXPECT_EQ(arrivee1, g_4.enumererSommetsAPartirDe(1)) ;
+    EXPECT_EQ(arrivee3, g_4.enumererSommetsAPartirDe(3)) ;
+    EXPECT_EQ(depart1, g_4.enumererSommetsVers(1)) ;
+    EXPECT_EQ(depart3, g_4.enumererSommetsVers(3)) ;
 }

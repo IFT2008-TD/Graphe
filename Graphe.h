@@ -41,9 +41,9 @@ public:
 
     size_t taille () const ;
 
-    listeAdjacence enumererSommetsArrivee(const T&) const ;
+    listeAdjacence enumererSommetsAPartirDe(const T&) const ;
 
-    listeAdjacence enumererSommetsDepart(const T&) const ;
+    listeAdjacence enumererSommetsVers(const T&) const ;
 
     std::string format () const ;
 
@@ -88,7 +88,7 @@ bool Graphe<T>::areteExiste(const T &depart, const T &arrivee) const {
 
 template<typename T>
 size_t Graphe<T>::degreEntree(const T &cle) const {
-    return enumererSommetsDepart(cle).size() ;
+    return enumererSommetsVers(cle).size() ;
 }
 
 template<typename T>
@@ -103,14 +103,14 @@ size_t Graphe<T>::taille() const {
 }
 
 template<typename T>
-typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsArrivee(const T &cle) const {
-    if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsArrivee: sommet inexistant") ;
+typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsAPartirDe(const T &cle) const {
+    if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsAPartirDe: sommet inexistant") ;
     return listes.at(cle) ;
 }
 
 template<typename T>
-typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsDepart(const T &cle) const {
-    if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsDepart: sommet inexistant") ;
+typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsVers(const T &cle) const {
+    if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsVers: sommet inexistant") ;
     listeAdjacence resultat ;
     for (auto liste: listes) if (liste.second.find(cle) != liste.second.end()) resultat.insert(liste.first) ;
     return resultat ;
