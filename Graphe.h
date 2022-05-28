@@ -147,12 +147,15 @@ template<typename T>
 void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
     if (!sommetExiste(ancienneCle)) throw std::invalid_argument("renommerUnSommet: sommet inexistant") ;
 
-    for (auto liste: listes) if (liste.find(ancienneCle)) {
-        liste.erase(ancienneCle) ;
-        liste.insert(nouvelleCle) ;
+    for (auto liste: listes) {
+        auto it = liste.second.find(ancienneCle) ;
+        if (it != liste.second.end()) {
+            liste.second.erase(it) ;
+            liste.second.insert(nouvelleCle) ;
+        }
     }
 
-    listes.insert(nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())) ;
+    listes.insert({nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
     listes.erase(ancienneCle) ;
     assert(invariant()) ;
 }

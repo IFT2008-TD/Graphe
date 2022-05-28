@@ -170,3 +170,13 @@ TEST_F(GrapheTest, retirerUnSommet_g2) {
     EXPECT_EQ(vide, g_2.enumererSommetsVers(2)) ;
 
 }
+
+TEST_F(GrapheTest, renommerUnSommet_g2) {
+    Graphe<int>::listeAdjacence attendu1 {2}, attendu2 {666}, vide ;
+    g_2.renommerUnSommet(1, 666) ;
+    EXPECT_EQ(2, g_2.taille()) ;
+    EXPECT_EQ(attendu1, g_2.enumererSommetsAPartirDe(666)) ;
+    EXPECT_EQ(attendu2, g_2.enumererSommetsVers(2)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsVers(666)) ;
+    EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
+}
