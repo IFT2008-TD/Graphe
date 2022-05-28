@@ -17,7 +17,7 @@ class Graphe {
 public:
     typedef  std::set<T> listeAdjacence;
  public:
-    explicit Graphe() ;
+    explicit Graphe() = default ;
 
     Graphe (std::initializer_list<T>) ;
 
@@ -54,8 +54,6 @@ private:
 
 };
 
-template <typename T>
-Graphe<T>::Graphe() {}
 
 template <typename T>
 Graphe<T>::Graphe(std::initializer_list<T> l) {
