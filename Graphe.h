@@ -23,7 +23,13 @@ public:
 
     void ajouterUnSommet(const T&) ;
 
+    void renommerUnSommet(const T&, const T&) ;
+
+    void retirerUnSommet(const T&) ;
+
     void ajouterUneArete(const T&, const T&) ;
+
+    void retirerUneArete(const T&, const T&) ;
 
     bool sommetExiste(const T&) const ;
 
@@ -49,13 +55,11 @@ private:
 };
 
 template <typename T>
-Graphe<T>::Graphe() {
-
-}
+Graphe<T>::Graphe() {}
 
 template <typename T>
 Graphe<T>::Graphe(std::initializer_list<T> l) {
-
+    for (auto sommet: l) ajouterUnSommet(sommet) ;
 }
 
 template<typename T>
@@ -115,6 +119,31 @@ typename Graphe<T>::listeAdjacence Graphe<T>::enumererSommetsDepart(const T &cle
 template<typename T>
 std::string Graphe<T>::format() const {
     return std::string();
+}
+
+template<typename T>
+void Graphe<T>::retirerUneArete(const T &depart, const T &arrivee) {
+    if (!areteExiste(depart, arrivee)) throw std::invalid_argument("retirerUneArete: arète inexistante") ;
+    listes.at(depart).erase(arrivee) ;
+}
+
+template<typename T>
+void Graphe<T>::retirerUnSommet(const T &depart) {
+    for (auto liste: listes) if (liste.find(depart))  liste.erase(depart) ;
+    listes.erase(depart) ;
+}
+
+template<typename T>
+void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
+    if (!sommetExiste(ancienneCle)) throw std::invalid_argument("renommerUnSommet: sommet inexistant") ;
+
+    for (auto liste: listes) if (liste.find(ancienneCle)) {
+        liste.erase(ancienneCle) ;
+        liste.insert(nouvelleCle) ;
+    }
+
+    listes.insert(nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())) ;
+    listes.erase(ancienneCle) ;
 }
 
 
