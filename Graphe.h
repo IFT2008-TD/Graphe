@@ -51,6 +51,8 @@ private:
 
     std::map<T, std::set<T>> listes ;
 
+    bool invariant () const ;
+
 
 };
 
@@ -58,12 +60,14 @@ private:
 template <typename T>
 Graphe<T>::Graphe(std::initializer_list<T> l) {
     for (auto sommet: l) ajouterUnSommet(sommet) ;
+    assert(invariant()) ;
 }
 
 template<typename T>
 void Graphe<T>::ajouterUnSommet(const T &cle) {
     auto res = listes.insert(std::pair<T, std::set<T>> (cle, std::set<T>())) ;
     if (!res.second) throw std::invalid_argument("ajouterUnSommet: sommet inexistant") ;
+    assert(invariant()) ;
 }
 
 template<typename T>
@@ -71,6 +75,8 @@ void Graphe<T>::ajouterUneArete(const T &cleDepart, const T &cleArrivee) {
     if (!sommetExiste(cleDepart) || !sommetExiste(cleArrivee)) throw std::invalid_argument("ajouterUneArete: sommet inexistant") ;
     if (areteExiste(cleDepart, cleArrivee)) throw std::invalid_argument("ajouterUneArete: are deja existante.") ;
     listes.at(cleDepart).insert(cleArrivee) ;
+
+    assert(invariant()) ;
 }
 
 template<typename T>
@@ -123,6 +129,7 @@ template<typename T>
 void Graphe<T>::retirerUneArete(const T &depart, const T &arrivee) {
     if (!areteExiste(depart, arrivee)) throw std::invalid_argument("retirerUneArete: arète inexistante") ;
     listes.at(depart).erase(arrivee) ;
+    assert(invariant()) ;
 }
 
 template<typename T>
@@ -132,6 +139,8 @@ void Graphe<T>::retirerUnSommet(const T &depart) {
         if (it != liste.second.end())  liste.second.erase(it) ;
     }
     listes.erase(depart) ;
+
+    assert(invariant()) ;
 }
 
 template<typename T>
@@ -145,6 +154,15 @@ void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
 
     listes.insert(nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())) ;
     listes.erase(ancienneCle) ;
+    assert(invariant()) ;
+}
+
+template<typename T>
+bool Graphe<T>::invariant() const {
+    for (auto sommet: listes) {
+        for (auto destination: sommet.second) if (!sommetExiste(destination)) return false ;
+    }
+    return true;
 }
 
 
