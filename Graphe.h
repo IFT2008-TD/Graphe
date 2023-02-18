@@ -15,12 +15,15 @@
 template <typename T>
 class Graphe {
 public:
-    typedef  std::set<T> ListeAdjacence;
+    using  ListeAdjacence = std::set<T> ;
+    using  Arete          = std::pair<T, T> ;
 
  public:
     explicit Graphe() = default ;
 
     Graphe (std::initializer_list<T>) ;
+
+    Graphe (std::initializer_list<T>, std::initializer_list<Arete>) ;
 
     void ajouterUnSommet(const T&) ;
 
@@ -284,6 +287,11 @@ typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommets() const {
     ListeAdjacence resultat ;
     for (auto e: listes) resultat.insert(e.first) ;
     return resultat ;
+}
+
+template<typename T>
+Graphe<T>::Graphe(std::initializer_list<T> lsom, std::initializer_list<Arete> lar) : Graphe(lsom) {
+    for (auto arete: lar) ajouterUneArete(arete.first, arete.second) ;
 }
 
 
