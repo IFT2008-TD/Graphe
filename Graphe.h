@@ -16,7 +16,7 @@ template <typename T>
 class Graphe {
 public:
     using  ListeAdjacence = std::set<T> ;
-    using  Arete          = std::pair<T, T> ;
+    using  Arete          = std::pair<T, T> ; // Paire (départ, arrivée)
 
  public:
     explicit Graphe() = default ;
