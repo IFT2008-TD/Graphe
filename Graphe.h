@@ -6,7 +6,9 @@
 #define GRAPHE_GRAPHE_H
 
 #include <set>
+#include <unordered_set>
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <stdexcept>
 #include <initializer_list>
@@ -14,9 +16,16 @@
 
 template <typename T>
 class Graphe {
+
 public:
-    using  ListeAdjacence = std::set<T> ;
-    using  Arete          = std::pair<T, T> ; // Paire (départ, arrivée)
+    using Arete = struct Arete {
+        T depart ;
+        T arrivee ;
+
+        explicit Arete(std::pair<T, T> l) : depart(l.first), arrivee(l.second) {}
+    };
+
+    using  ListeAdjacence = std::unordered_set<T> ;
 
  public:
     explicit Graphe() = default ;
@@ -55,7 +64,7 @@ public:
 
 private:
 
-    std::map<T, std::set<T>> listes ;
+    std::unordered_map<T, std::unordered_set<T>> listes ;
 
 private:
 
@@ -84,7 +93,7 @@ Graphe<T>::Graphe(std::initializer_list<T> l) {
  */
 template<typename T>
 void Graphe<T>::ajouterUnSommet(const T &cle) {
-    auto res = listes.insert(std::pair<T, std::set<T>> (cle, std::set<T>())) ;
+    auto res = listes.insert(std::pair<T, ListeAdjacence> (cle, ListeAdjacence())) ;
     if (!res.second) throw std::invalid_argument("ajouterUnSommet: sommet inexistant") ;
     assert(invariant()) ;
 }
@@ -256,7 +265,7 @@ void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
     }
 
     // Ensuite recopier la liste d'adjacence associée à l'ancienne clé dans l'entrée de la nouvelle clé
-    listes.insert({nouvelleCle, std::set<T> (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
+    listes.insert({nouvelleCle, ListeAdjacence (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
 
     // Puis effacer l'ancienne entrée
     listes.erase(ancienneCle) ;
