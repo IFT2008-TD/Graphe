@@ -10,24 +10,24 @@ protected:
 
     GrapheTest() : g_2({1, 2}), g_4({1, 2, 3, 4}) {}
 
-    Graphe<int> g_defaut ;
-    Graphe<int> g_4 ; 
-    Graphe<int> g_2 ; 
+    Graphe<int, int> g_defaut ;
+    Graphe<int, int> g_4 ;
+    Graphe<int, int> g_2 ;
     
     void SetUp () override {
 
-        g_2.ajouterUneArete(1, 2) ;
+        g_2.ajouterUneArete(1, 2, 1) ;
         
-        g_4.ajouterUneArete(1, 2) ; 
-        g_4.ajouterUneArete(2, 3) ; 
-        g_4.ajouterUneArete(3, 4) ; 
-        g_4.ajouterUneArete(4, 1) ; 
+        g_4.ajouterUneArete(1, 2, 1) ;
+        g_4.ajouterUneArete(2, 3, 1) ;
+        g_4.ajouterUneArete(3, 4, 1) ;
+        g_4.ajouterUneArete(4, 1, 1) ;
         
     }
 };
 
 TEST_F(GrapheTest, enumererSommets) {
-    Graphe<int>::ListeAdjacence l2 {1, 2}, l4 {1, 2, 3, 4}, lvide ;
+    Graphe<int, int>::ListeAdjacence_t l2 {1, 2}, l4 {1, 2, 3, 4}, lvide ;
     EXPECT_EQ(l2, g_2.enumererSommets()) ;
     EXPECT_EQ(l4, g_4.enumererSommets()) ;
     EXPECT_EQ(lvide, g_defaut.enumererSommets()) ;
@@ -93,13 +93,13 @@ TEST_F(GrapheTest, degreSortie_sommet_inexistant_throw) {
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g2) {
-    Graphe<int>::ListeAdjacence attendu {2}, vide ;
+    Graphe<int, int>::ListeAdjacence_t attendu {2}, vide ;
     EXPECT_EQ(attendu, g_2.enumererSommetsAPartirDe(1)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsAPartirDe(2)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsArrivee_g4) {
-    Graphe<int>::ListeAdjacence attendu {3} ;
+    Graphe<int, int>::ListeAdjacence_t attendu {3} ;
     EXPECT_EQ(attendu, g_4.enumererSommetsAPartirDe(2)) ;
 }
 
@@ -114,12 +114,12 @@ TEST_F(GrapheTest, enumererSommetsArrivee_inexistant_throw) {
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g4) {
-    Graphe<int>::ListeAdjacence attendu {3} ;
+    Graphe<int, int>::ListeAdjacence_t attendu {3} ;
     EXPECT_EQ(attendu, g_4.enumererSommetsVers(4)) ;
 }
 
 TEST_F(GrapheTest, enumererSommetsDepart_g2) {
-    Graphe<int>::ListeAdjacence attendu {1}, vide ;
+    Graphe<int, int>::ListeAdjacence_t attendu {1}, vide ;
     EXPECT_EQ(attendu, g_2.enumererSommetsVers(2)) ;
     EXPECT_EQ(vide, g_2.enumererSommetsVers(1)) ;
 }
@@ -130,7 +130,7 @@ TEST_F(GrapheTest, taille) {
 }
 
 TEST_F(GrapheTest, ajouterUnSommet_g2) {
-    Graphe<int>::ListeAdjacence vide ;
+    Graphe<int, int>::ListeAdjacence_t vide ;
     g_2.ajouterUnSommet(3) ;
     EXPECT_EQ(3, g_2.taille()) ;
     EXPECT_TRUE(g_2.sommetExiste(3)) ;
@@ -141,9 +141,9 @@ TEST_F(GrapheTest, ajouterUnSommet_g2) {
 }
 
 TEST_F(GrapheTest, ajouterUneArete_g4) {
-    Graphe<int>::ListeAdjacence arrivee1{2, 3}, arrivee3{4} ;
-    Graphe<int>::ListeAdjacence depart1{4}, depart3{1, 2};
-    g_4.ajouterUneArete(1, 3) ;
+    Graphe<int, int>::ListeAdjacence_t arrivee1{2, 3}, arrivee3{4} ;
+    Graphe<int, int>::ListeAdjacence_t depart1{4}, depart3{1, 2};
+    g_4.ajouterUneArete(1, 3, 1) ;
     EXPECT_EQ(4, g_4.taille()) ;
     EXPECT_EQ(2, g_4.degreSortie(1)) ;
     EXPECT_EQ(1, g_4.degreSortie(2)) ;
@@ -160,7 +160,7 @@ TEST_F(GrapheTest, ajouterUneArete_g4) {
 }
 
 TEST_F(GrapheTest, retirerUneArete_g2) {
-    Graphe<int>::ListeAdjacence vide ;
+    Graphe<int, int>::ListeAdjacence_t vide ;
     g_2.retirerUneArete(1, 2) ;
     EXPECT_EQ(2, g_2.taille()) ;
     EXPECT_EQ(vide, g_2.enumererSommetsVers(1)) ;
@@ -170,7 +170,7 @@ TEST_F(GrapheTest, retirerUneArete_g2) {
 }
 
 TEST_F(GrapheTest, retirerUnSommet_g2) {
-    Graphe<int>::ListeAdjacence vide, listeSommets {2} ;
+    Graphe<int, int>::ListeAdjacence_t vide, listeSommets {2} ;
     g_2.retirerUnSommet(1) ;
     EXPECT_EQ(1, g_2.taille()) ;
     EXPECT_EQ(listeSommets, g_2.enumererSommets()) ;
@@ -180,7 +180,7 @@ TEST_F(GrapheTest, retirerUnSommet_g2) {
 }
 
 TEST_F(GrapheTest, renommerUnSommet_g2) {
-    Graphe<int>::ListeAdjacence attendu1 {2}, attendu2 {666}, vide, listeSommets {2, 666} ;
+    Graphe<int, int>::ListeAdjacence_t attendu1 {2}, attendu2 {666}, vide, listeSommets {2, 666} ;
     g_2.renommerUnSommet(1, 666) ;
     EXPECT_EQ(2, g_2.taille()) ;
     EXPECT_EQ(listeSommets, g_2.enumererSommets()) ;

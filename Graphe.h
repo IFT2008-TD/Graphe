@@ -1,46 +1,62 @@
-//
-// Created by Pascal Charpentier on 2022-05-24.
-//
+/**
+ * @file Graphe.h
+ * @brief Interface de la classe Graphe développée en IFT-2008 en travail dirigé.
+ * @author Pascal Charpentier
+ *
+ */
 
 #ifndef GRAPHE_GRAPHE_H
 #define GRAPHE_GRAPHE_H
 
-#include <set>
+
 #include <unordered_set>
-#include <map>
 #include <unordered_map>
 #include <algorithm>
 #include <stdexcept>
 #include <initializer_list>
 
 
-template <typename T>
+template <typename T, typename P>
 class Graphe {
 
 public:
-    using Arete = struct Arete {
-        T depart ;
-        T arrivee ;
+    using Cle_t = T ;
+    using Poids_t = P ;
 
-        explicit Arete(std::pair<T, T> l) : depart(l.first), arrivee(l.second) {}
+    using  Arrivee_t = struct Arrivee_t {
+        Cle_t destination ;
+        Poids_t poids ;
+
+        explicit Arrivee_t(Cle_t arrivee) : destination(arrivee), poids() {}
+        Arrivee_t(Cle_t arrivee, Poids_t poids) : destination(arrivee), poids(poids) {}
     };
 
-    using  ListeAdjacence = std::unordered_set<T> ;
+    using Arete_t = struct Arete_t {
+        Cle_t depart ;
+        Arrivee_t arrivee ;
+
+        Arete_t(Cle_t depart, Arrivee_t arrivee) : depart(depart), arrivee(arrivee) {} ;
+        Arete_t(Cle_t depart, Cle_t arrivee, Poids_t poids) : depart(depart), arrivee(arrivee, poids) {}
+    };
+
+    using  ListeAdjacence_t         = std::unordered_set<Cle_t> ;
+    using  ListeAdjacencePonderee_t = std::unordered_map<Cle_t, Poids_t> ;
+    using  Graphe_t                 = std::unordered_map<Cle_t, ListeAdjacencePonderee_t> ;
 
  public:
     explicit Graphe() = default ;
 
-    Graphe (std::initializer_list<T>) ;
+    Graphe (std::initializer_list<Cle_t>) ;
 
-    Graphe (std::initializer_list<T>, std::initializer_list<Arete>) ;
+    Graphe (std::initializer_list<Cle_t>, std::initializer_list<Arete_t>) ;
 
-    void ajouterUnSommet(const T&) ;
+    void ajouterUnSommet(const Cle_t&) ;
 
-    void renommerUnSommet(const T&, const T&) ;
+    void renommerUnSommet(const Cle_t&, const Cle_t&) ;
 
     void retirerUnSommet(const T&) ;
 
-    void ajouterUneArete(const T&, const T&) ;
+    void ajouterUneArete(const T&, const T&, const P&) ;
 
     void retirerUneArete(const T&, const T&) ;
 
@@ -54,19 +70,20 @@ public:
 
     size_t taille () const ;
 
-    ListeAdjacence enumererSommetsAPartirDe(const T&) const ;
+    ListeAdjacence_t enumererSommetsAPartirDe(const T&) const ;
 
-    ListeAdjacence enumererSommetsVers(const T&) const ;
+    ListeAdjacence_t enumererSommetsVers(const T&) const ;
 
-    ListeAdjacence enumererSommets () const ;
+    ListeAdjacence_t enumererSommets () const ;
 
     std::string format () const ;
 
 private:
 
-    std::unordered_map<T, std::unordered_set<T>> listes ;
+    Graphe_t listes ;
 
 private:
+
 
     bool invariant () const ;
 
@@ -79,8 +96,8 @@ private:
  * @param l liste d'initialisation.  Ne peut contenir de doublons, sinon le constructeur plante.
  * @except invalid_argument si des doublons sont présents dans la liste d'intialisation.
  */
-template <typename T>
-Graphe<T>::Graphe(std::initializer_list<T> l) {
+template <typename T, typename P>
+Graphe<T, P>::Graphe(std::initializer_list<T> l) {
     for (auto sommet: l) ajouterUnSommet(sommet) ;
     assert(invariant()) ;
 }
@@ -91,11 +108,16 @@ Graphe<T>::Graphe(std::initializer_list<T> l) {
  * @param cle Nom du sommet à rajouter.
  * @except invalid_argument si le sommet est déjà présent.
  */
-template<typename T>
-void Graphe<T>::ajouterUnSommet(const T &cle) {
-    auto res = listes.insert(std::pair<T, ListeAdjacence> (cle, ListeAdjacence())) ;
-    if (!res.second) throw std::invalid_argument("ajouterUnSommet: sommet inexistant") ;
+template<typename T, typename P>
+void Graphe<T, P>::ajouterUnSommet(const T &cle) {
+    auto res = listes.insert(std::pair<Cle_t, ListeAdjacencePonderee_t> (cle, ListeAdjacencePonderee_t())) ;
+    if (!res.second) throw std::invalid_argument("ajouterUnSommet: sommet dupliqué") ;
     assert(invariant()) ;
+}
+
+template<typename T, typename P>
+Graphe<T, P>::Graphe(std::initializer_list<T> lsom, std::initializer_list<Arete_t> lar) : Graphe(lsom) {
+    for (auto arete: lar) ajouterUneArete(arete.first, arete.second) ;
 }
 
 /**
@@ -106,11 +128,11 @@ void Graphe<T>::ajouterUnSommet(const T &cle) {
  * @except invalid_argument si un des sommets est non-valide
  * @except invalid_argument si l'arête est déjà présente.
  */
-template<typename T>
-void Graphe<T>::ajouterUneArete(const T &cleDepart, const T &cleArrivee) {
+template<typename T, typename P>
+void Graphe<T, P>::ajouterUneArete(const T &cleDepart, const T &cleArrivee, const P& poids) {
     if (!sommetExiste(cleDepart) || !sommetExiste(cleArrivee)) throw std::invalid_argument("ajouterUneArete: sommet inexistant") ;
-    if (areteExiste(cleDepart, cleArrivee)) throw std::invalid_argument("ajouterUneArete: are deja existante.") ;
-    listes.at(cleDepart).insert(cleArrivee) ;
+    auto res = listes.at(cleDepart).insert({cleArrivee, poids}) ;
+    if (!res.second) throw std::invalid_argument("ajouterUneArete: arete dupliquée") ;
 
     assert(invariant()) ;
 }
@@ -121,8 +143,8 @@ void Graphe<T>::ajouterUneArete(const T &cleDepart, const T &cleArrivee) {
  * @param cle Sommet à vérifier
  * @return true si cle est dans les sommets du graphe.
  */
-template<typename T>
-bool Graphe<T>::sommetExiste(const T &cle) const {
+template<typename T, typename P>
+bool Graphe<T, P>::sommetExiste(const T &cle) const {
     return listes.find(cle) != listes.end() ;
 }
 
@@ -133,8 +155,8 @@ bool Graphe<T>::sommetExiste(const T &cle) const {
  * @param arrivee Sommet destination
  * @return true si une arête existe entre depart et arrivee
  */
-template<typename T>
-bool Graphe<T>::areteExiste(const T &depart, const T &arrivee) const {
+template<typename T, typename P>
+bool Graphe<T, P>::areteExiste(const T &depart, const T &arrivee) const {
     if (!sommetExiste(depart) || !sommetExiste(arrivee)) throw std::invalid_argument("areteExiste: sommets inexistants") ;
     return listes.at(depart).find(arrivee) != listes.at(depart).end() ;
 }
@@ -146,8 +168,8 @@ bool Graphe<T>::areteExiste(const T &depart, const T &arrivee) const {
  * @return Le nombre d'arêtes se rendant à cle.
  * @except invalid_argument si cle est non valide.
  */
-template<typename T>
-size_t Graphe<T>::degreEntree(const T &cle) const {
+template<typename T, typename P>
+size_t Graphe<T, P>::degreEntree(const T &cle) const {
     return enumererSommetsVers(cle).size() ;
 }
 
@@ -158,8 +180,8 @@ size_t Graphe<T>::degreEntree(const T &cle) const {
  * @return Le nombre d'arêtes sortant de cle
  * @except invalid_argument si cle est absent du graphe.
  */
-template<typename T>
-size_t Graphe<T>::degreSortie(const T &cle) const {
+template<typename T, typename P>
+size_t Graphe<T, P>::degreSortie(const T &cle) const {
     if (!sommetExiste(cle)) throw std::invalid_argument("degreSortie: sommet inexistant") ;
     return listes.at(cle).size() ;
 }
@@ -169,8 +191,8 @@ size_t Graphe<T>::degreSortie(const T &cle) const {
  * @tparam T
  * @return Le nombre de sommets
  */
-template<typename T>
-size_t Graphe<T>::taille() const {
+template<typename T, typename P>
+size_t Graphe<T, P>::taille() const {
     return listes.size() ;
 }
 
@@ -181,10 +203,15 @@ size_t Graphe<T>::taille() const {
  * @return Les sommets ayant une arête partant de source.
  * @except invalid_argument si cle est non valide.
  */
-template<typename T>
-typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsAPartirDe(const T &cle) const {
+template<typename T, typename P>
+typename Graphe<T, P>::ListeAdjacence_t Graphe<T, P>::enumererSommetsAPartirDe(const T &cle) const {
     if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsAPartirDe: sommet inexistant") ;
-    return listes.at(cle) ;
+
+    auto listePonderee = listes.at(cle) ;
+    ListeAdjacence_t liste ;
+
+    for (const auto& elem: listePonderee) liste.insert(elem.first) ;
+    return liste ;
 }
 
 /**
@@ -193,11 +220,11 @@ typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsAPartirDe(const T &
  * @param cle Le sommet destination
  * @return Les sommets ayant une arête se rendant à destination
  */
-template<typename T>
-typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsVers(const T &cle) const {
+template<typename T, typename P>
+typename Graphe<T, P>::ListeAdjacence_t Graphe<T, P>::enumererSommetsVers(const T &cle) const {
     if (!sommetExiste(cle)) throw std::invalid_argument("enumererSommetsVers: sommet inexistant") ;
-    ListeAdjacence resultat ;
-    for (auto liste: listes) if (liste.second.find(cle) != liste.second.end()) resultat.insert(liste.first) ;
+    ListeAdjacence_t resultat ;
+    for (const auto& liste: listes) if (liste.second.find(cle) != liste.second.end()) resultat.insert(liste.first) ;
     return resultat ;
 }
 
@@ -206,8 +233,8 @@ typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommetsVers(const T &cle) 
  * @tparam T
  * @return
  */
-template<typename T>
-std::string Graphe<T>::format() const {
+template<typename T, typename P>
+std::string Graphe<T, P>::format() const {
     return std::string();
 }
 
@@ -218,8 +245,8 @@ std::string Graphe<T>::format() const {
  * @param arrivee sommet destination de l'arête
  * @except invalid_argument si l'arête n'existe pas ou si un sommet est non valide.
  */
-template<typename T>
-void Graphe<T>::retirerUneArete(const T &depart, const T &arrivee) {
+template<typename T, typename P>
+void Graphe<T, P>::retirerUneArete(const T &depart, const T &arrivee) {
     if (!areteExiste(depart, arrivee)) throw std::invalid_argument("retirerUneArete: arète inexistante") ;
     listes.at(depart).erase(arrivee) ;
     assert(invariant()) ;
@@ -231,9 +258,9 @@ void Graphe<T>::retirerUneArete(const T &depart, const T &arrivee) {
  * @param depart Sommet à retirer
  * @except invalid_argument si depart est non valide.
  */
-template<typename T>
-void Graphe<T>::retirerUnSommet(const T &depart) {
-    for (auto liste: listes) {
+template<typename T, typename P>
+void Graphe<T, P>::retirerUnSommet(const T &depart) {
+    for (auto& liste: listes) {
         auto it = liste.second.find(depart) ;
         if (it != liste.second.end())  liste.second.erase(it) ;
     }
@@ -249,23 +276,24 @@ void Graphe<T>::retirerUnSommet(const T &depart) {
  * @param nouvelleCle Nouvelle clé du sommet
  * @except invalid_argument si l'ancienne clé n'existe pas, ou si la nouvelle clé est déjà présente.
  */
-template<typename T>
-void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
+template<typename T, typename P>
+void Graphe<T, P>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
     if (!sommetExiste(ancienneCle)) throw std::invalid_argument("renommerUnSommet: sommet inexistant") ;
     if (sommetExiste(nouvelleCle)) throw std::invalid_argument("renommerUnSommet: nouveau sommet déjà présent.") ;
 
     // D'abord on doit remplacer l'ancienne clé dans toutes les listes d'adjacences
 
-    for (auto liste: listes) {
+    for (auto& liste: listes) {
         auto it = liste.second.find(ancienneCle) ;
         if (it != liste.second.end()) {
+            auto poids = it->second ;
             liste.second.erase(it) ;
-            liste.second.insert(nouvelleCle) ;
+            liste.second.insert({nouvelleCle, poids}) ;
         }
     }
 
     // Ensuite recopier la liste d'adjacence associée à l'ancienne clé dans l'entrée de la nouvelle clé
-    listes.insert({nouvelleCle, ListeAdjacence (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
+    listes.insert({nouvelleCle, ListeAdjacencePonderee_t (listes.at(ancienneCle).begin(), listes.at(ancienneCle).end())}) ;
 
     // Puis effacer l'ancienne entrée
     listes.erase(ancienneCle) ;
@@ -278,10 +306,10 @@ void Graphe<T>::renommerUnSommet(const T &ancienneCle, const T& nouvelleCle) {
  * @tparam T
  * @return true si le graphe est valide.
  */
-template<typename T>
-bool Graphe<T>::invariant() const {
+template<typename T, typename P>
+bool Graphe<T, P>::invariant() const {
     for (auto sommet: listes) {
-        for (auto destination: sommet.second) if (!sommetExiste(destination)) return false ;
+        for (auto destination: sommet.second) if (!sommetExiste(destination.first)) return false ;
     }
     return true;
 }
@@ -291,17 +319,16 @@ bool Graphe<T>::invariant() const {
  * @tparam T
  * @return Une liste des sommets.
  */
-template<typename T>
-typename Graphe<T>::ListeAdjacence Graphe<T>::enumererSommets() const {
-    ListeAdjacence resultat ;
-    for (auto e: listes) resultat.insert(e.first) ;
+template<typename T, typename P>
+typename Graphe<T, P>::ListeAdjacence_t Graphe<T, P>::enumererSommets() const {
+    ListeAdjacence_t resultat ;
+    for (const auto& e: listes) resultat.insert(e.first) ;
     return resultat ;
 }
 
-template<typename T>
-Graphe<T>::Graphe(std::initializer_list<T> lsom, std::initializer_list<Arete> lar) : Graphe(lsom) {
-    for (auto arete: lar) ajouterUneArete(arete.first, arete.second) ;
-}
+
+
+
 
 
 #endif //GRAPHE_GRAPHE_H
