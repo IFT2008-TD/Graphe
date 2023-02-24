@@ -11,7 +11,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-add_executable(graphe_base main.cpp)
+add_executable(graphe_base main.cpp graphes_algorithmes.h Graphe.h)
 
 enable_testing()
 

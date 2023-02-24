@@ -48,6 +48,8 @@ public:
 
     Graphe (std::initializer_list<Cle_t>) ;
 
+    Graphe(ListeAdjacence_t l) ;
+
     Graphe (std::initializer_list<Cle_t>, std::initializer_list<Arete_t>) ;
 
     void ajouterUnSommet(const Cle_t&) ;
@@ -75,6 +77,8 @@ public:
     ListeAdjacence_t enumererSommetsVers(const T&) const ;
 
     ListeAdjacence_t enumererSommets () const ;
+
+    Poids_t lirePoids(Cle_t depart, Cle_t destination) const ;
 
     std::string format () const ;
 
@@ -326,9 +330,15 @@ typename Graphe<T, P>::ListeAdjacence_t Graphe<T, P>::enumererSommets() const {
     return resultat ;
 }
 
+template<typename T, typename P>
+Graphe<T, P>::Graphe(Graphe::ListeAdjacence_t l) {
+   for (auto sommet: l) ajouterUnSommet(sommet) ;
+}
 
-
-
+template<typename T, typename P>
+typename Graphe<T, P>::Poids_t Graphe<T, P>::lirePoids(T depart, T destination) const {
+    return listes.at(depart).at(destination) ;
+}
 
 
 #endif //GRAPHE_GRAPHE_H
