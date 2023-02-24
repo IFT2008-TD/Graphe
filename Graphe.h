@@ -48,7 +48,7 @@ public:
 
     Graphe (std::initializer_list<Cle_t>) ;
 
-    Graphe(ListeAdjacence_t l) ;
+    explicit Graphe(ListeAdjacence_t l) ;
 
     Graphe (std::initializer_list<Cle_t>, std::initializer_list<Arete_t>) ;
 
