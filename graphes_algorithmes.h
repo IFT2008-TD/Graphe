@@ -70,4 +70,26 @@ std::unordered_map<T, T> explorer_BFS(const Graphe<T, P>& graphe, const T& depar
     return predecesseurs ;
 }
 
+template <typename T, typename P>
+std::vector<T> tri_topologique(Graphe<T, P> graphe) {
+    std::vector<T> tri ;
+
+    std::unordered_map<T, size_t> arites ;
+    for (auto sommet: graphe.enumererSommets()) arites.insert({sommet, graphe.degreEntree(sommet)}) ;
+
+    std::queue<T> sources ;
+    for (auto sommet: graphe.enumererSommets()) if (arites.at(sommet) == 0) sources.push(sommet) ;
+
+    while (!sources.empty()) {
+        auto courant = sources.front() ; sources.pop() ;
+        tri.push_back(courant) ;
+        for (auto voisin: graphe.enumererSommetsAPartirDe(courant)) {
+             -- arites.at(voisin) ;
+             if (arites.at(voisin) == 0) sources.push(voisin) ;
+        }
+    }
+    if (tri.size() != graphe.taille()) throw std::logic_error("tri_topologique: le graphe proposé n'est pas acyclique") ;
+    return tri ;
+}
+
 #endif //GRAPHE_BASE_GRAPHES_ALGORITHMES_H

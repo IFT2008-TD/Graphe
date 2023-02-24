@@ -88,3 +88,37 @@ TEST_F(GrapheEssai, explorer_BFS_quatreSommets) {
     EXPECT_EQ(2, resultat.at(3)) ;
     EXPECT_EQ(2, resultat.at(4)) ;
 }
+
+TEST_F(GrapheEssai, tri_topologique_graphe_vide) {
+    auto resultat = tri_topologique(vide) ;
+    EXPECT_TRUE(resultat.empty()) ;
+}
+
+TEST_F(GrapheEssai, tri_topologique_un_sommet) {
+    std::vector<int> attendu {1} ;
+    auto resultat = tri_topologique(unSommet) ;
+    EXPECT_EQ(attendu, resultat) ;
+}
+
+TEST_F(GrapheEssai, tri_topologique_deux_sommets) {
+    std::vector<int> attendu {1, 2} ;
+    auto resultat = tri_topologique(deuxSommets) ;
+    EXPECT_EQ(attendu, resultat) ;
+}
+
+TEST_F(GrapheEssai, tri_topologique_trois_sommets) {
+    std::vector<int> attendu {1, 2, 3} ;
+    auto resultat = tri_topologique(troisSommets) ;
+    EXPECT_EQ(attendu, resultat) ;
+}
+
+TEST_F(GrapheEssai, tri_topologique_quatre_sommets) {
+    std::vector<int> attendu {1, 2, 3, 4} ;
+    auto resultat = tri_topologique(quatreSommets) ;
+    EXPECT_EQ(attendu, resultat) ;
+}
+
+TEST_F(GrapheEssai, tri_topologique_cycle_throw) {
+    troisSommets.ajouterUneArete(3, 1, 1) ;
+    EXPECT_THROW(tri_topologique(troisSommets), std::logic_error) ;
+}
