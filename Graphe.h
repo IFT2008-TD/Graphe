@@ -42,6 +42,8 @@ public:
 
     Graphe (std::initializer_list<Cle_t>) ;
 
+    explicit Graphe(ListeAdjacence_t l) ;
+
     void ajouterUnSommet(const Cle_t&) ;
 
     void renommerUnSommet(const Cle_t&, const Cle_t&) ;

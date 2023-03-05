@@ -20,6 +20,12 @@ Graphe<T, P>::Graphe(std::initializer_list<Cle_t> l) {
     assert(invariant()) ;
 }
 
+template<typename T, typename P>
+Graphe<T, P>::Graphe(Graphe::ListeAdjacence_t l) {
+    for (auto sommet: l) ajouterUnSommet(sommet) ;
+}
+
+
 /**
  * Ajoute un nouveau sommet sur le graphe. Sa liste d'adjacence est a-priori vide.
  * @tparam T
