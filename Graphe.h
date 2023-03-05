@@ -68,6 +68,8 @@ public:
 
     ListeAdjacence_t enumererSommets () const ;
 
+    ListeAdjacencePonderee_t enumererSommetsEtPoidsAPartirDe(const T&) const ;
+
     Poids_t lirePoids(Cle_t depart, Cle_t destination) const ;
 
     std::string format () const ;
@@ -79,7 +81,7 @@ private:
      * pondération.
      */
     using Arrivee_t = struct Arrivee_t {
-        size_t destination ;
+        size_t  destination ;
         Poids_t poids ;
 
         Arrivee_t(size_t destination, Poids_t poids) : destination(destination), poids(poids) {}
@@ -92,12 +94,13 @@ private:
 
 private:
 
-    bool numeroDeSommetExiste(size_t n) const ;
+    bool   numeroDeSommetExiste(size_t n) const ;
     size_t numeroDeLaCle(const Cle_t&) const ;
-    bool invariant () const ;
+
+    bool   invariant () const ;
 
 
-};
+} ;
 
 #include "Graphe_implantation.hpp"
 

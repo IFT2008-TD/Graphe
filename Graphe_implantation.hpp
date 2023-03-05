@@ -244,12 +244,13 @@ void Graphe<T, P>::retirerUneArete(const T &source, const T &arrivee) {
 template<typename T, typename P>
 void Graphe<T, P>::retirerUnSommet(const T &sommet) {
 
-    auto idxSommet = numeroDeLaCle(sommet) ;
+
 
     auto it = std::find(sommets.begin(), sommets.end(), sommet) ;
     if (it == sommets.end()) throw std::invalid_argument("retirerUnSommet: sommet inexistant") ;
     sommets.erase(it) ;
 
+    auto idxSommet = numeroDeLaCle(sommet) ;
     listes.erase(listes.begin() + idxSommet) ;
 
     for (auto& liste: listes)
@@ -314,6 +315,23 @@ bool Graphe<T, P>::invariant() const {
         if (adj_unique.size() != liste.size()) return false ;
     }
     return true ;
+}
+
+/**
+ * Retourne un dictionnaire des noeuds adjacents à un sommet donné, et le poids de l'arête.
+ * @tparam T
+ * @tparam P
+ * @param cle La clé du sommet de départ
+ * @return Un dictionnaire <cle, poids> contenant les clés adjacentes et le poids des arêtes respectives.
+ * @except invalid_argument si le sommet de départ est inexistant dans le graphe.
+ */
+template<typename T, typename P>
+typename Graphe<T, P>::ListeAdjacencePonderee_t Graphe<T, P>::enumererSommetsEtPoidsAPartirDe(const Cle_t& cle) const {
+    auto idxCle = numeroDeLaCle(cle) ;
+    if (idxCle == taille()) throw std::invalid_argument("enumererSommetsEtPoidsAPartirde: sommet inexistant") ;
+
+    auto& liste = listes.at(idxCle) ;
+    return Graphe::ListeAdjacencePonderee_t(liste.cbegin(), liste.cend()) ;
 }
 
 
