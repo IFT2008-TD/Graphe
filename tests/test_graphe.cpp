@@ -9,18 +9,13 @@ class GrapheTest : public ::testing::Test {
 protected:
     Graphe<int, int> g_defaut ; 
     Graphe<int, int> g_4 ; 
-    Graphe<int, int> g_2 ; 
+    Graphe<int, int> g_2 ;
+
+    GrapheTest() : g_defaut(), g_2({1, 2}), g_4({1, 2, 3, 4}) {}
     
     void SetUp () override {
-        g_2.ajouterUnSommet(1) ; 
-        g_2.ajouterUnSommet(2) ;
-        
+
         g_2.ajouterUneArete(1, 2, 11) ;
-        
-        g_4.ajouterUnSommet(1) ;
-        g_4.ajouterUnSommet(2) ; 
-        g_4.ajouterUnSommet(3) ; 
-        g_4.ajouterUnSommet(4) ; 
         
         g_4.ajouterUneArete(1, 2, 11) ;
         g_4.ajouterUneArete(2, 3, 12) ;

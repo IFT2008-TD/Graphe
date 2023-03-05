@@ -17,6 +17,7 @@
 template <typename T, typename P>
 Graphe<T, P>::Graphe(std::initializer_list<Cle_t> l) {
     for (auto e: l) ajouterUnSommet(e) ;
+    assert(invariant()) ;
 }
 
 /**
