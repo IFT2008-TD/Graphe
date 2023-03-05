@@ -217,3 +217,9 @@ TEST_F(GrapheTest, lirePoids_g_4) {
 TEST_F(GrapheTest, lirePoids_g_4_arete_absente) {
     EXPECT_THROW(g_4.lirePoids(1, 4), std::invalid_argument) ;
 }
+
+TEST_F(GrapheTest, enumererSommetsEtPoidsAPartirDe_g_4) {
+    g_4.ajouterUneArete(4, 2, 15) ;
+    Graphe<int, int>::ListeAdjacencePonderee_t attendu {{1, 14}, {2, 15}} ;
+    EXPECT_EQ(attendu, g_4.enumererSommetsEtPoidsAPartirDe(4)) ;
+}

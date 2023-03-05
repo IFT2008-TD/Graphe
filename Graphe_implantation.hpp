@@ -244,13 +244,13 @@ void Graphe<T, P>::retirerUneArete(const T &source, const T &arrivee) {
 template<typename T, typename P>
 void Graphe<T, P>::retirerUnSommet(const T &sommet) {
 
-
+    auto idxSommet = numeroDeLaCle(sommet) ;
 
     auto it = std::find(sommets.begin(), sommets.end(), sommet) ;
     if (it == sommets.end()) throw std::invalid_argument("retirerUnSommet: sommet inexistant") ;
     sommets.erase(it) ;
 
-    auto idxSommet = numeroDeLaCle(sommet) ;
+
     listes.erase(listes.begin() + idxSommet) ;
 
     for (auto& liste: listes)
@@ -330,8 +330,9 @@ typename Graphe<T, P>::ListeAdjacencePonderee_t Graphe<T, P>::enumererSommetsEtP
     auto idxCle = numeroDeLaCle(cle) ;
     if (idxCle == taille()) throw std::invalid_argument("enumererSommetsEtPoidsAPartirde: sommet inexistant") ;
 
-    auto& liste = listes.at(idxCle) ;
-    return Graphe::ListeAdjacencePonderee_t(liste.cbegin(), liste.cend()) ;
+    Graphe::ListeAdjacencePonderee_t  resultat ;
+    for (const auto& arrivee: listes.at(idxCle)) resultat.insert({sommets.at(arrivee.destination), arrivee.poids}) ;
+    return resultat ;
 }
 
 
