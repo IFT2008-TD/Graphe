@@ -113,9 +113,9 @@ EXPECT_EQ(attendu, resultat) ;
 }
 
 TEST_F(GrapheEssai, tri_topologique_quatre_sommets) {
-std::vector<int> attendu {1, 2, 3, 4} ;
+std::vector<int> attendu1 {1, 2, 3, 4}, attendu2 {1, 2, 4, 3} ;
 auto resultat = tri_topologique(quatreSommets) ;
-EXPECT_EQ(attendu, resultat) ;
+EXPECT_TRUE(attendu1 == resultat || attendu2 == resultat) ;
 }
 
 TEST_F(GrapheEssai, tri_topologique_cycle_throw) {
