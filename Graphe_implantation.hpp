@@ -305,10 +305,10 @@ bool Graphe<T, P>::invariant() const {
     if (sommets.size() != listes.size()) return false ;
 
     for (auto liste: listes) {
-        ListeAdjacencePonderee_t adj_unique ;
+        ListeAdjacence_t adj_unique ;
         for (auto dest: liste) {
             if (!numeroDeSommetExiste(dest.destination)) return false ;
-            adj_unique.insert({dest.destination, dest.poids}) ;
+            adj_unique.insert(dest.destination) ;
         }
         if (adj_unique.size() != liste.size()) return false ;
     }
