@@ -95,9 +95,9 @@ private:
 private:
 
     bool   numeroDeSommetExiste(size_t n) const ;
-    size_t numeroDeLaCle(const Cle_t&) const ;
+    size_t numeroDeLaCle(const Cle_t&)    const ;
 
-    bool   invariant () const ;
+    bool   invariant ()                   const ;
 
 
 } ;
