@@ -208,8 +208,6 @@ TEST_F(GrapheTest, retirerUnSommet_g_4) {
 
     EXPECT_TRUE(g_4.enumererSommetsAPartirDe(2).empty()) ;
     EXPECT_TRUE(g_4.enumererSommetsVers(4).empty()) ;
-
-
 }
 
 TEST_F(GrapheTest, lirePoids_g_4) {
