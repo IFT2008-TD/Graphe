@@ -9,6 +9,7 @@
 #define GRAPHE_BASE_GRAPHES_ALGORITHMES_H
 
 #include "Graphe.h"
+#include "ResolveurDijkstra.h"
 #include <stack>
 #include <queue>
 #include <limits>

@@ -122,3 +122,14 @@ TEST_F(GrapheEssai, tri_topologique_cycle_throw) {
     troisSommets.ajouterUneArete(3, 1, 1) ;
     EXPECT_THROW(tri_topologique(troisSommets), std::logic_error) ;
 }
+
+TEST_F(GrapheEssai, dijkstra_quatre_sommets) {
+    std::unordered_map<int, double> distances_attendus {{1, 0}, {2, 1}, {3, 2}, {4, 2}} ;
+    std::unordered_map<int, int> predecesseurs_attendus {{2, 1}, {3, 2}, {4, 2}} ;
+    ResolveurDijkstra<int> dijkstra(quatreSommets) ;
+    dijkstra.resoudre(1) ;
+    auto r = dijkstra.resultats() ;
+    EXPECT_EQ(distances_attendus, r.distances) ;
+    EXPECT_EQ(predecesseurs_attendus, r.predecesseurs) ;
+
+}
