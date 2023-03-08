@@ -12,6 +12,8 @@
 #include <stack>
 #include <queue>
 #include <limits>
+#include <map>
+#include <set>
 
 
 /**
@@ -27,26 +29,6 @@ struct ResultatsDFS_t {
     std::unordered_set<T> parcourus ;    //!< Ensemble des noeuds parcourus
 
     explicit ResultatsDFS_t(Graphe<T, P> graphe) : graphe(graphe) {}
-};
-
-template <typename T>
-struct ResultatsDijkstra {
-    std::unordered_map<T, T> predecesseurs ;
-    std::unordered_map<T, double> distances ;
-
-    explicit ResultatsDijkstra(const Graphe<T, double>& graphe, const T& dep) : predecesseurs(), distances() {
-        for (const auto& e: graphe.enumererSommets()) distances.insert({e, std::numeric_limits<double>::infinity()}) ;
-        distances.at(dep) = 0 ;
-    }
-
-};
-
-template <typename T>
-class DistCompare {
-public:
-    bool operator () (const T& lhs, const T& rhs) {
-        return lhs.second < rhs.second ;
-    }
 };
 
 /**
@@ -160,22 +142,8 @@ std::vector<T> tri_topologique(Graphe<T, P> graphe) {
     return tri ;
 }
 
-template <typename T>
-struct ResultatsDijkstra<T> dijkstra(Graphe<T, double> graphe, const T& depart) {
-    struct ResultatsDijkstra<T> resultats(graphe, depart) ;
-    std::priority_queue<T, std::vector<T>, DistCompare<std::pair<T, double>>> nonResolus(graphe.enumererSommets()) ;
 
-    while (!nonResolus.empty()) {
-        auto courant = nonResolus.top() ; nonResolus.pop() ;
-        for (auto& voisin: graphe.enumererSommetsEtPoidsAPartirDe(courant)) {
-            auto temp = resultats.distances.at(courant) + graphe.lirePoids(courant, voisin) ;
-            if (temp < resultats.distances.at(courant)) {
-                resultats.distances.at(voisin) = temp ;
-                resultats.predecesseurs[voisin]  = courant ;
-            }
-        }
-    }
-    return resultats ;
-}
+
+
 
 #endif //GRAPHE_BASE_GRAPHES_ALGORITHMES_H

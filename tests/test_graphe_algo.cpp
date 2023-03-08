@@ -12,7 +12,7 @@ protected:
     Graphe<int, int> unSommet ;
     Graphe<int, int> deuxSommets ;
     Graphe<int, int> troisSommets ;
-    Graphe<int, int> quatreSommets ;
+    Graphe<int, double> quatreSommets ;
 
     GrapheEssai() : vide(), unSommet({1}), deuxSommets({1, 2}), troisSommets({1, 2, 3}), quatreSommets({1, 2, 3, 4}) {}
 
