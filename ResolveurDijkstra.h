@@ -10,9 +10,23 @@
 #include <unordered_map>
 #include <limits>
 
+/**
+ * Voici une classe permettant d'appliquer l'algorithme de Dijkstra à un objet Graphe.  L'utilisation d'une classe
+ * comporte des avantages: les algorithmes proposés classiquement dans les livres utilisent souvent des structures
+ * de données ayant une portée globale.  Nous pouvons utiliser des attributs de notre classe afin de maintenir ces
+ * structures de données à toutes nos fonctions, mais sans leur donner une portée globale.
+ *
+ * Aussi, dans une classe, il est plus aisé de définir des méthodes privées auxiliaires qui nous permettent d'alléger
+ * l'écriture de nos méthodes publiques.
+ *
+ * @tparam T
+ */
 template <typename T>
 class ResolveurDijkstra {
 
+    /**
+     * Type public servant à transmettre les résultats de l'algorithme.
+     */
 public:
     struct ResultatsDijkstra {
         std::unordered_map<T, double> distances;

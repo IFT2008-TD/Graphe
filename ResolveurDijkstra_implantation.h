@@ -86,7 +86,10 @@ typename ResolveurDijkstra<T>::ResultatsDijkstra ResolveurDijkstra<T>::resultats
 
 /**
  * Scanne l'ensemble des noeuds non-résolus pour trouver le prochain à être solutionné.  C'est celui dont la distance
- * au noeud de départ est minimal.
+ * au noeud de départ est minimal.  Cette méthode est le point faible de notre implantation.  Idéalement, les non-résolus
+ * seraient gardés dans une file prioritaire qui les classerait pas distance.  Toutefois, les objets priority_queue de la
+ * STL ne permettent pas de modifier "on the fly" les priorités des éléments: celles-ci sont fixes, alors que dans Dijkstra
+ * on doit pouvoir les modifier au fur et à mesure qu'on relaxe les noeuds.
  * @tparam T
  * @return La clé du prochain noeud à résoudre.
  */
