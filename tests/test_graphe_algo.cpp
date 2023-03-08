@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 #include "Graphe.h"
 #include "graphes_algorithmes.h"
+#include <string>
 
 class GrapheEssai : public ::testing::Test {
 protected:
@@ -13,8 +14,9 @@ protected:
     Graphe<int, int> deuxSommets ;
     Graphe<int, int> troisSommets ;
     Graphe<int, double> quatreSommets ;
+    Graphe<std::string, double> six_sommets ;
 
-    GrapheEssai() : vide(), unSommet({1}), deuxSommets({1, 2}), troisSommets({1, 2, 3}), quatreSommets({1, 2, 3, 4}) {}
+    GrapheEssai() : vide(), unSommet({1}), deuxSommets({1, 2}), troisSommets({1, 2, 3}), quatreSommets({1, 2, 3, 4}), six_sommets({"A", "B", "C", "D", "E", "F"}) {}
 
     void SetUp() override {
         deuxSommets.ajouterUneArete(1, 2, 1) ;
@@ -25,6 +27,17 @@ protected:
         quatreSommets.ajouterUneArete(1, 2, 1) ;
         quatreSommets.ajouterUneArete(2, 3, 1) ;
         quatreSommets.ajouterUneArete(2, 4, 1) ;
+
+        six_sommets.ajouterUneArete("A", "B", 1) ;
+        six_sommets.ajouterUneArete("A", "C", 4) ;
+        six_sommets.ajouterUneArete("B", "C", 2) ;
+        six_sommets.ajouterUneArete("B", "D", 3) ;
+        six_sommets.ajouterUneArete("C", "D", 5) ;
+        six_sommets.ajouterUneArete("C", "E", 6) ;
+        six_sommets.ajouterUneArete("D", "F", 10) ;
+        six_sommets.ajouterUneArete("E", "F", 1) ;
+
+
     }
 };
 
@@ -132,4 +145,15 @@ TEST_F(GrapheEssai, dijkstra_quatre_sommets) {
     EXPECT_EQ(distances_attendus, r.distances) ;
     EXPECT_EQ(predecesseurs_attendus, r.predecesseurs) ;
 
+}
+
+TEST_F(GrapheEssai, dijkstra_six_sommets) {
+    std::unordered_map<std::string, double> distances_attendues {{"A", 0}, {"B", 1}, {"C", 3}, {"D", 4}, {"E", 9}, {"F", 10}} ;
+    std::unordered_map<std::string, std::string> predecesseurs_attendus {{"B", "A"}, {"C", "B"}, {"D", "B"}, {"E", "C"}, {"F", "E"}} ;
+
+    ResolveurDijkstra<std::string> dijkstra(six_sommets) ;
+    dijkstra.resoudre("A") ;
+    auto r = dijkstra.resultats() ;
+    EXPECT_EQ(distances_attendues, r.distances) ;
+    EXPECT_EQ(predecesseurs_attendus, r.predecesseurs) ;
 }
